@@ -1,8 +1,10 @@
 package org.product.back.controller;
 
+import org.product.back.entity.Account;
 import org.product.back.entity.Product;
 import org.product.back.service.ProductService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +21,11 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody @Validated Product product) {
+    public ResponseEntity<Product> createProduct(@RequestBody @Validated Product product, Authentication authentication) {
+        Account createdAccount = (Account) authentication.getPrincipal();
+        if (!"admin@admin.com".equals(createdAccount.getEmail())) {
+            return ResponseEntity.status(403).body(null);
+        }
         return ResponseEntity.ok(productService.createProduct(product));
     }
 
@@ -36,7 +42,11 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody @Validated Product updatedProduct) {
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody @Validated Product updatedProduct, Authentication authentication) {
+        Account createdAccount = (Account) authentication.getPrincipal();
+        if (!"admin@admin.com".equals(createdAccount.getEmail())) {
+            return ResponseEntity.status(403).body(null);
+        }
         return ResponseEntity.ok(productService.updateProduct(id, updatedProduct));
     }
 
