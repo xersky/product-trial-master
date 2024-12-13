@@ -5,6 +5,7 @@
 		"name": "Bamboo Watch",
 		"description": "Product Description",
 		"image": "bamboo-watch.jpg",
+    "quantity": 2,
 		"price": 65,
 		"category": "Accessories",
 		"createdAt": 1718114215761,
